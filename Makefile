@@ -6,7 +6,7 @@ LDLIBS = -ldpp -lsqlite3
 RM = rm -rf
 
 # Sources and stuff
-CPPSRC = src/main.cpp
+CPPSRC = src/main.cpp src/log.cpp src/config.cpp
 CPPOBJ = $(CPPSRC:src/%.cpp=build/%.o)
 EXEC = build/main.out
 
@@ -31,3 +31,7 @@ $(EXEC): $(CPPOBJ)
 
 build/%.o: src/%.cpp
 	$(CC) $(CCFLAGS) -c $< -o $@
+
+build/main.o: src/log.h src/config.h
+build/log.o: src/log.h
+build/config.o: src/config.h src/log.h

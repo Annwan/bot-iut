@@ -2,20 +2,20 @@
 #include <fstream>
 #include <iostream>
 
-#include "config.hpp"
-#include "log.hpp"
+#include "config.h"
+#include "log.h"
 
 using namespace dpp;
 
 void register_slash_commands(cluster& bot) {
-    log::note("Registering slash commands");
+    logging::note("Registering slash commands");
     slashcommand ping_command;
     ping_command.set_name("ping")
         .set_description("Pings the bot to see if it is awake")
         .set_application_id(bot.me.id);
 
     bot.global_command_create(ping_command);
-    log::note("Registered /ping command");
+    logging::note("Registered /ping command");
 
     slashcommand group_command;
     command_option group_role_option(co_string, "role",
@@ -29,8 +29,8 @@ void register_slash_commands(cluster& bot) {
         .add_option(group_role_option);
     bot.global_command_create(group_command);
 
-    log::note("Registered /group command");
-    log::note("Done registering slash commands");
+    logging::note("Registered /group command");
+    logging::note("Done registering slash commands");
 }
 
 int main() {
@@ -40,14 +40,14 @@ int main() {
     if (token_file.is_open()) {
         token_file >> token;
     } else {
-        log::fatal("Failed to read token file, aborting");
+        logging::fatal("Failed to read token file, aborting");
     }
 
-    log::note("Token loaded");
+    logging::note("Token loaded");
 
     dpp::cluster bot(token);
 
-    log::note("Created bot object");
+    logging::note("Created bot object");
 
     bot.on_ready([&bot](const dpp::ready_t& event) {
         register_slash_commands(bot);

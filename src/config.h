@@ -7,6 +7,8 @@
 
 #include <sqlite3.h>
 
+#include "log.h"
+
 void setup_database();
 std::vector<std::string> group_role_names();
 

@@ -33,3 +33,6 @@
 
 # secrets
 *.secret
+
+# local database
+*.db
