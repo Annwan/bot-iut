@@ -1,4 +1,6 @@
+#include <cstdlib>
 #include <dpp/dpp.h>
+#include <fmt/core.h>
 #include <fstream>
 #include <iostream>
 
@@ -8,19 +10,19 @@
 using namespace dpp;
 
 void register_slash_commands(cluster& bot) {
-    logging::note("Registering slash commands");
+    NOTE("Registering slash commands");
     slashcommand ping_command;
     ping_command.set_name("ping")
         .set_description("Pings the bot to see if it is awake")
         .set_application_id(bot.me.id);
 
     bot.global_command_create(ping_command);
-    logging::note("Registered /ping command");
+    NOTE("Registered /ping command");
 
     slashcommand group_command;
     command_option group_role_option(co_string, "role",
                                      "the group to be added to", true);
-    for (std::string role : group_role_names()) {
+    for (auto role : group_role_names()) {
         group_role_option.add_choice(command_option_choice(role, role));
     }
     group_command.set_name("group")
@@ -29,8 +31,8 @@ void register_slash_commands(cluster& bot) {
         .add_option(group_role_option);
     bot.global_command_create(group_command);
 
-    logging::note("Registered /group command");
-    logging::note("Done registering slash commands");
+    NOTE("Registered /group command");
+    NOTE("Done registering slash commands");
 }
 
 int main() {
@@ -40,23 +42,23 @@ int main() {
     if (token_file.is_open()) {
         token_file >> token;
     } else {
-        logging::fatal("Failed to read token file, aborting");
+        FATAL("Failed to read token file, aborting");
+        std::abort();
     }
 
-    logging::note("Token loaded");
+    NOTE("Token loaded");
 
     dpp::cluster bot(token);
 
-    logging::note("Created bot object");
+    NOTE("Created bot object");
 
     bot.on_ready([&bot](const dpp::ready_t& event) {
         register_slash_commands(bot);
-        std::cerr << "[NOTICE] Started with session ID: " << event.session_id
-                  << std::endl;
-        std::cerr << "[NOTICE] Logged in as " << bot.me.username << std::endl;
+        NOTE(fmt::format("Started with session ID {}", event.session_id));
+        NOTE(fmt::format("Logged in as `{}`", bot.me.username));
     });
 
-    std::cerr << "[NOTICE] Registered `on_ready' event handler" << std::endl;
+    NOTE("Registered `on_ready' event handler");
 
     bot.on_message_create([&bot](const dpp::message_create_t& event) {
         if (event.msg->content == "%ping") {
@@ -75,10 +77,9 @@ int main() {
         }
     });
 
-    std::cerr << "[NOTICE] Registered `on_message_create' event handler"
-              << std::endl;
+    NOTE("Registered `on_message_create' event handler");
 
-    std::cerr << "[NOTICE] Starting bot" << std::endl;
+    NOTE("Starting bot");
 
     bot.start(false);
     return 0;
