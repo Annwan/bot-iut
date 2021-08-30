@@ -9,6 +9,8 @@
 
 using namespace dpp;
 
+Config cfg;
+
 void register_slash_commands(cluster& bot) {
     NOTE("Registering slash commands");
     slashcommand ping_command;
@@ -22,8 +24,8 @@ void register_slash_commands(cluster& bot) {
     slashcommand group_command;
     command_option group_role_option(co_string, "role",
                                      "the group to be added to", true);
-    for (auto role : group_role_names()) {
-        group_role_option.add_choice(command_option_choice(role, role));
+    for (auto group : cfg.groups) {
+        group_role_option.add_choice(command_option_choice(group.name, group.name));
     }
     group_command.set_name("group")
         .set_description("Manage groups")
@@ -45,8 +47,6 @@ int main() {
         FATAL("Failed to read token file, aborting");
         std::abort();
     }
-
-    setup_database();
 
     NOTE("Token loaded");
 

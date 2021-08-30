@@ -1,12 +1,12 @@
 #include "config.h"
 
-State::State(std::string grp_config) : config_path(grp_config) {
+Config::Config(std::string grp_config) : config_path(grp_config) {
     this->reload_config();
 }
 
-State::State() : State("groups.cfg") {}
+Config::Config() : Config("groups.cfg") {}
 
-void State::reload_config() {
+void Config::reload_config() {
     this->groups.clear();
     std::ifstream config (this->config_path);
     if (config) {

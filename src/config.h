@@ -21,10 +21,10 @@ struct Remind {
     std::string message;
 };
 
-class State {
+class Config {
 public:
-    State(std::string grp_config);
-    State();
+    Config(std::string grp_config);
+    Config();
     
     void reload_config();
     void save_config();
