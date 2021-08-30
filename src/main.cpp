@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <dpp/dpp.h>
 #include <fmt/core.h>
+
 #include <fstream>
 #include <iostream>
 
@@ -25,7 +26,8 @@ void register_slash_commands(cluster& bot) {
     command_option group_role_option(co_string, "role",
                                      "the group to be added to", true);
     for (auto group : cfg.groups) {
-        group_role_option.add_choice(command_option_choice(group.name, group.name));
+        group_role_option.add_choice(
+            command_option_choice(group.name, group.name));
     }
     group_command.set_name("group")
         .set_description("Manage groups")
