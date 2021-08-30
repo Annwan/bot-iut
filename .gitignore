@@ -34,5 +34,6 @@
 # secrets
 *.secret
 
-# local database
+# local databases and config
+*.cfg
 *.db

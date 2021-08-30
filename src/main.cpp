@@ -46,6 +46,8 @@ int main() {
         std::abort();
     }
 
+    setup_database();
+
     NOTE("Token loaded");
 
     dpp::cluster bot(token);

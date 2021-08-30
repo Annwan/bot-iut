@@ -2,7 +2,7 @@
 CC = g++
 CCFLAGS = -Wall -Werror -Wextra -pedantic -std=c++17
 LDFLAGS =
-LDLIBS = -ldpp -lsqlite3 -lfmt
+LDLIBS = -ldpp -lfmt
 RM = rm -rf
 
 # Sources and stuff
