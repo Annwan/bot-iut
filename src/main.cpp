@@ -1,41 +1,43 @@
 #include <cstdlib>
+#include <dpp/cluster.h>
+#include <dpp/discord.h>
 #include <dpp/dpp.h>
+#include <dpp/slashcommand.h>
 #include <fmt/core.h>
 
 #include <fstream>
 #include <iostream>
+#include <variant>
 
 #include "config.h"
 #include "log.h"
 
 using namespace dpp;
 
-Config cfg;
+Config *cfg = nullptr;
 
 void register_slash_commands(cluster& bot) {
-    NOTE("Registering slash commands");
+    /*NOTE("Unregistering previously registered commands");
+    std::vector<dpp::snowflake> to_delete;
+    bool running = true;
+    bot.global_commands_get([&to_delete](const dpp::confirmation_callback_t& conf){
+        if (conf.is_error()) {
+            WARN("Couldn't get commands to remove");
+            return;
+        }
+        dpp::slashcommand_map sm = std::get<dpp::slashcommand_map>(conf.value);
+        for (auto& kv: sm) {
+            to_delete.push_back(kv.first);
+        }
+        });*/
+    NOTE("Registering commands");
     slashcommand ping_command;
     ping_command.set_name("ping")
         .set_description("Pings the bot to see if it is awake")
         .set_application_id(bot.me.id);
 
     bot.global_command_create(ping_command);
-    NOTE("Registered /ping command");
-
-    slashcommand group_command;
-    command_option group_role_option(co_string, "role",
-                                     "the group to be added to", true);
-    for (auto group : cfg.groups) {
-        group_role_option.add_choice(
-            command_option_choice(group.name, group.name));
-    }
-    group_command.set_name("group")
-        .set_description("Manage groups")
-        .set_application_id(bot.me.id)
-        .add_option(group_role_option);
-    bot.global_command_create(group_command);
-
-    NOTE("Registered /group command");
+    NOTE("<Commands> /ping");
     NOTE("Done registering slash commands");
 }
 
@@ -52,6 +54,9 @@ int main() {
 
     NOTE("Token loaded");
 
+    cfg = new Config();
+    NOTE("Config created and loaded");
+
     dpp::cluster bot(token);
 
     NOTE("Created bot object");
@@ -64,12 +69,14 @@ int main() {
 
     NOTE("Registered `on_ready' event handler");
 
+#if 0
     bot.on_message_create([&bot](const dpp::message_create_t& event) {
         if (event.msg->content == "%ping") {
             bot.message_create(dpp::message(event.msg->channel_id, "Pong!"));
         }
     });
-
+#endif
+    
     bot.on_interaction_create([](const dpp::interaction_create_t& event) {
         if (event.command.type == dpp::it_application_command) {
             dpp::command_interaction cmd_data =

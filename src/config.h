@@ -12,7 +12,7 @@ struct Group {
     std::string name;
     dpp::snowflake group_id;
     dpp::snowflake channel_id;
-    int ade_group;
+    std::string ade_group;
 };
 
 struct Remind {

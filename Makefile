@@ -2,11 +2,11 @@
 CC = g++
 CCFLAGS = -Wall -Werror -Wextra -pedantic -std=c++17
 LDFLAGS =
-LDLIBS = -ldpp -lfmt
+LDLIBS = -ldpp -lfmt -lcurl
 RM = rm -rf
 
 # Sources and stuff
-CPPSRC = src/main.cpp src/config.cpp src/log.cpp
+CPPSRC = src/main.cpp src/config.cpp src/log.cpp src/edt.cpp
 CPPOBJ = $(CPPSRC:src/%.cpp=build/%.o)
 EXEC = build/main.out
 
@@ -35,3 +35,4 @@ build/%.o: src/%.cpp
 build/main.o: src/log.h src/config.h
 build/config.o: src/config.h src/log.h
 build/log.o: src/log.h
+build/edt.o: src/log.h
