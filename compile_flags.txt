@@ -1,4 +1,0 @@
--Wall
--pedantic
--std=c++17
--xc++-header
